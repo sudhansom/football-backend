@@ -43,5 +43,11 @@ const getUserById = (req, res, next)=> {
     res.json({user}) ;
 }
 
+const createUser = (req, res, next)=>{
+    const { name, age, address } = req.body;
+    return res.json({name, age, address})
+}
+
 exports.getUserById = getUserById;
 exports.getAllUsers = getAllUsers;
+exports.createUser = createUser;

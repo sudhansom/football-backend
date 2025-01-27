@@ -6,6 +6,8 @@ const HttpError = require('./models/http-error');
 
 const app = express();
 
+app.use(bodyParser.json());
+
 app.use('/api/users',usersRoute);
 
 app.use((req, res, next)=>{
