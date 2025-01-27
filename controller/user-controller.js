@@ -1,5 +1,6 @@
 const HttpError = require('../models/http-error.js');
-const uuid = require('uuid')
+const uuid = require('uuid');
+const { validationResult } = require('express-validator');
 
 let users = [
     {
@@ -44,6 +45,10 @@ const getUserById = (req, res, next)=> {
 }
 
 const createUser = (req, res, next)=>{
+    const result = validationResult(req);
+    if(!result.isEmpty()){
+        return res.json({message: "not a valid name"})
+    }
     const { name, age, address } = req.body;
     const user = {
         id: uuid.v4(),
@@ -56,7 +61,18 @@ const createUser = (req, res, next)=>{
 }
 
 const updateUser = (req, res, next) => {
+    const {name, age} = req.body;
+
     const userId = req.params.id;
+    const user = users.find(u => u.id == userId);
+    if(!user){
+        throw new HttpError("No such user...", 404);
+    }
+    const position = users.findIndex(u => u.id == userId);
+    user.age = age;
+    user.name = name;
+    users[position] = user;
+    return res.status(222).json({users})
 
 }
 
