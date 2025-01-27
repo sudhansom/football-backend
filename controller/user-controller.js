@@ -1,7 +1,7 @@
 const HttpError = require('../models/http-error.js');
 const uuid = require('uuid')
 
-const users = [
+let users = [
     {
         id: 1,
         name: "Bal Krishna",
@@ -34,7 +34,7 @@ const getAllUsers = (req, res, next)=> {
 }
 
 const getUserById = (req, res, next)=> {
-    const userId = req.params.uid;
+    const userId = req.params.id;
     const user = users.find(u => u.id == userId);
     if(!user){
         // return res.status(404).json({message: "user not found!!"})
@@ -51,9 +51,24 @@ const createUser = (req, res, next)=>{
         age,
         address
     }
+    users.push(user);
     return res.json(user);
+}
+
+const updateUser = (req, res, next) => {
+    const userId = req.params.id;
+
+}
+
+const deleteUser = (req, res, next) => {
+    const userId = req.params.id;
+    users = users.filter(u => u.id != userId)
+    return res.status(200).json({message: 'deleted successfully', users})
+
 }
 
 exports.getUserById = getUserById;
 exports.getAllUsers = getAllUsers;
 exports.createUser = createUser;
+exports.updateUser = updateUser;
+exports.deleteUser = deleteUser;
