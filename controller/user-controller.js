@@ -28,6 +28,11 @@ const users = [
     },
 ]
 
+const getAllUsers = (req, res, next)=> {
+    
+    res.json({users}) ;
+}
+
 const getUserById = (req, res, next)=> {
     const userId = req.params.uid;
     const user = users.find(u => u.id == userId);
@@ -39,3 +44,4 @@ const getUserById = (req, res, next)=> {
 }
 
 exports.getUserById = getUserById;
+exports.getAllUsers = getAllUsers;
