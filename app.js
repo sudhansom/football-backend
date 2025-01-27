@@ -1,11 +1,17 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const usersRoute = require('./routes/users-route')
+const usersRoute = require('./routes/users-route');
+const HttpError = require('./models/http-error');
 
 const app = express();
 
 app.use('/api/users',usersRoute);
+
+app.use((req, res, next)=>{
+    const err = new HttpError('Page not found.', 404);
+    throw err;
+})
 
 app.use((error, req, res, next)=>{
     if(res.headerSent){
