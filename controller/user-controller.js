@@ -1,5 +1,5 @@
-const HttpError = require('../models/http-error.js')
-
+const HttpError = require('../models/http-error.js');
+const uuid = require('uuid')
 
 const users = [
     {
@@ -45,7 +45,13 @@ const getUserById = (req, res, next)=> {
 
 const createUser = (req, res, next)=>{
     const { name, age, address } = req.body;
-    return res.json({name, age, address})
+    const user = {
+        id: uuid.v4(),
+        name,
+        age,
+        address
+    }
+    return res.json(user);
 }
 
 exports.getUserById = getUserById;
