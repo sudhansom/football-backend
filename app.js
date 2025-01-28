@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 const usersRoute = require('./routes/users-route');
 const HttpError = require('./models/http-error');
@@ -23,5 +24,13 @@ app.use((error, req, res, next)=>{
     res.json({message: error.message || "Server Error: An unknown Error Ocurred." })
 })
 
-app.listen(5000)
+
+mongoose.connect('mongodb+srv://football321:football321@cluster0.3wccq.mongodb.net/').then(()=>
+    {
+        app.listen(5000, ()=>{
+            console.log(`Server running at ${5000}`)
+        })
+        
+    }
+).catch(err=>console.log('Error connecting mongoose', err))
 
