@@ -1,6 +1,7 @@
 const HttpError = require('../models/http-error.js');
 const uuid = require('uuid');
 const { validationResult } = require('express-validator');
+const Place = require('../models/user.js')
 
 let users = [
     {
@@ -29,9 +30,14 @@ let users = [
     },
 ]
 
-const getAllUsers = (req, res, next)=> {
-    
-    res.json({users}) ;
+const getAllUsers = async (req, res, next)=> {
+    try{
+        const allUsers = await Place.find()
+    }catch(err){
+        const error = new HttpError(err, 5000)
+        return next(error)
+    }
+    res.json({allUsers}) ;
 }
 
 const getUserById = (req, res, next)=> {
@@ -44,19 +50,19 @@ const getUserById = (req, res, next)=> {
     res.json({user}) ;
 }
 
-const createUser = (req, res, next)=>{
+const createUser = async (req, res, next)=>{
     const result = validationResult(req);
     if(!result.isEmpty()){
         return res.json({message: "not a valid name"})
     }
     const { name, age, address } = req.body;
-    const user = {
+    const user = new Place({
         id: uuid.v4(),
         name,
         age,
         address
-    }
-    users.push(user);
+    })
+    await user.save()
     return res.json(user);
 }
 
