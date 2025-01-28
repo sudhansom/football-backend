@@ -93,16 +93,29 @@ const updateUser = async (req, res, next) => {
     try{
         await user.save();
     }catch(error){
-        throw new HttpError("Error on Saving...", 500)
+        return next(new HttpError("Error on Saving...", 500));
     }
     return res.status(222).json(user.toObject({getters: true}))
 }
 
-const deleteUser = (req, res, next) => {
+const deleteUser = async (req, res, next) => {
     const userId = req.params.id;
-    users = users.filter(u => u.id != userId)
-    return res.status(200).json({message: 'deleted successfully', users})
-
+    let user = null;
+    try{
+        user = await User.findById(userId);
+    }catch(error){
+        return next(new HttpError(' something went wrong...1', 400));
+    }
+    if(!user){
+        return next(new HttpError(' no such user...', 500));
+    }
+    try{
+        await user.deleteOne();
+    }catch(error){
+        console.log(error);
+        return next(new HttpError('something went wrong...', 400)); 
+    }
+    res.json({message: "Successfully deleted..."})
 }
 
 exports.getUserById = getUserById;
