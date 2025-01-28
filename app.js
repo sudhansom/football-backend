@@ -1,11 +1,15 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const chalk = require('chalk');
+
 
 const usersRoute = require('./routes/users-route');
 const HttpError = require('./models/http-error');
 
 const app = express();
+
+const port = 5000;
 
 app.use(bodyParser.json());
 
@@ -27,8 +31,9 @@ app.use((error, req, res, next)=>{
 
 mongoose.connect('mongodb+srv://football321:football321@cluster0.3wccq.mongodb.net/').then(()=>
     {
-        app.listen(5000, ()=>{
-            console.log(`Server running at ${5000}`)
+        console.log(chalk.whiteBright('Mongo DB connected....'));
+        app.listen(port, async ()=>{
+            console.log(chalk.blueBright(`server running at:: http://localhost:${port}`));
         })
         
     }
