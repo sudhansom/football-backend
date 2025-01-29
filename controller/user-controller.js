@@ -78,9 +78,6 @@ const createUser = async (req, res, next)=>{
 }
 
 const editPayments = async(req, res, next) => {
-    if(req.methods==='OPTIONS'){
-        return res.json({});
-    }
     const {month, value} = req.body;
     const userId = req.params.id;
     let user = null;
