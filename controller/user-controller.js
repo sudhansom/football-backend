@@ -127,6 +127,35 @@ const editMeasures = async(req, res, next) => {
     res.json({message: "Successfully saved.", user: user.toObject({getters: true})})
 }
 
+const editSkills = async(req, res, next) => {
+    const {skill, index} = req.body;
+    const userId = req.params.id;
+    let user = null;
+    try{
+        user = await User.findById(userId);
+    }catch(err){
+        const error = new HttpError("Unknown error", 500)
+        return next(error)
+    }
+    if(!user){
+        const error = new HttpError("No such user...", 404);
+        return next(error);
+    }
+    if(index){
+        user.skills[index] = skill;
+    }else {
+        user.skills.push(skill)
+    }
+
+    try{
+        user = await user.save();
+    }catch(err){
+        const error = new HttpError("Could not save skill", 500)
+        return next(error)
+    }
+    res.json({message: "Successfully saved skill.", user: user.toObject({getters: true})})
+}
+
 const updateUser = async (req, res, next) => {
     const {name, age, address} = req.body;
     const userId = req.params.id;
@@ -179,3 +208,4 @@ exports.updateUser = updateUser;
 exports.deleteUser = deleteUser;
 exports.editPayments = editPayments;
 exports.editMeasures = editMeasures;
+exports.editSkills = editSkills;
