@@ -77,6 +77,33 @@ const createUser = async (req, res, next)=>{
     return res.json(user.toObject({getters: true}));
 }
 
+const editPayments = async(req, res, next) => {
+    if(req.methods==='OPTIONS'){
+        return res.json({});
+    }
+    const {month, value} = req.body;
+    const userId = req.params.id;
+    let user = null;
+    try{
+        user = await User.findById(userId);
+    }catch(err){
+        const error = new HttpError("Unknown error", 500)
+        return next(error)
+    }
+    if(!user){
+        const error = new HttpError("No such user...", 404);
+        return next(error);
+    }
+    user.payments[month] = value;
+    try{
+        user = await user.save();
+    }catch(err){
+        const error = new HttpError("Could not save...", 500)
+        return next(error)
+    }
+    res.json({message: "Successfully saved."})
+}
+
 const updateUser = async (req, res, next) => {
     const {name, age, address} = req.body;
     const userId = req.params.id;
@@ -127,3 +154,4 @@ exports.getAllUsers = getAllUsers;
 exports.createUser = createUser;
 exports.updateUser = updateUser;
 exports.deleteUser = deleteUser;
+exports.editPayments = editPayments;
