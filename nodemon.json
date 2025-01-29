@@ -1,0 +1,7 @@
+{
+    "env": {
+        "DB_USER": "football321",
+        "DB_PASSWORD":"football321",
+        "DATABASE_NAME":"football"
+    }
+}

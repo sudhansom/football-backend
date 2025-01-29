@@ -29,7 +29,7 @@ app.use((error, req, res, next)=>{
 })
 
 
-mongoose.connect('mongodb+srv://football321:football321@cluster0.3wccq.mongodb.net/football').then(()=>
+mongoose.connect(`mongodb+srv://football321:${process.env.DB_PASSWORD}@cluster0.3wccq.mongodb.net/football`).then(()=>
     {
         console.log(chalk.whiteBright('Mongo DB connected....'));
         app.listen(port, async ()=>{

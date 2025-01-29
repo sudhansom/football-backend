@@ -3,33 +3,6 @@ const uuid = require('uuid');
 const { validationResult } = require('express-validator');
 const User = require('../models/user.js')
 
-let users = [
-    {
-        id: 1,
-        name: "Bal Krishna",
-        age: "45",
-        address: "United Kingdom"
-    },
-    {
-        id: 2,
-        name: "Sudhan Krishna",
-        age: "42",
-        address: "Danmark"
-    },
-    {
-        id: 3,
-        name: "Resham Krishna",
-        age: "40",
-        address: "Kathmandu"
-    },
-    {
-        id: 4,
-        name: "Birendra Kumar",
-        age: "40",
-        address: "Pokhara"
-    },
-]
-
 const getAllUsers = async (req, res, next)=> {
     let allUsers = [];
     try{
@@ -52,7 +25,7 @@ const getUserById = async (req, res, next)=> {
     }
     if(!user){
         // return res.status(404).json({message: "user not found!!"})
-        throw new HttpError("User not found", 404)
+        return next(new HttpError("User not found", 404))
     }
     res.json(user.toObject({getters: true})) ;
 }
@@ -62,14 +35,45 @@ const createUser = async (req, res, next)=>{
     if(!result.isEmpty()){
         return res.json({message: "not a valid name"})
     }
-    const { name, age, address } = req.body;
+    const { name, dob, address, email, password, role } = req.body;
+    const [day, month, year] = dob.split('/');
+    
     const user = new User({
         id: uuid.v4(),
         name,
-        age,
-        address
+        dob: new Date(`${year}-${month}-${day}`),
+        address,
+        role,
+        email,
+        password,
+        updated: null,
+        weight: 0,
+        height: 0,
+        joined:new Date(),
+        skills: [],
+        specific: [],
+        payments: {
+            jan:"",
+            feb:"",
+            mar:"",
+            apr:"",
+            may:"",
+            jun:"",
+            jul:"",
+            aug:"",
+            sep:"",
+            oct:"",
+            nov:"",
+            dec:"",
+        },
+
     })
-    await user.save()
+    try{
+        await user.save();
+    }catch(err){
+        console.log(err);
+        return next(new HttpError('not saved.', 400))
+    }
     return res.json(user.toObject({getters: true}));
 }
 
