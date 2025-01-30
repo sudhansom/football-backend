@@ -1,6 +1,7 @@
 const HttpError = require('../models/http-error.js');
 const uuid = require('uuid');
 const { validationResult } = require('express-validator');
+
 const User = require('../models/user.js')
 
 const getAllUsers = async (req, res, next)=> {
@@ -82,7 +83,7 @@ const createUser = async (req, res, next)=>{
     //     return next(new HttpError('not saved.', 400))
     // }
     // return res.json(user.toObject({getters: true}));
-    return res.json(user);
+    return res.json({message: 'saved successfully', user});
 }
 
 const editPayments = async(req, res, next) => {
