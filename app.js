@@ -2,15 +2,18 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const chalk = require('chalk');
+const path = require('path');
 
 
 const usersRoute = require('./routes/users-route');
+const pricesRoute = require('./routes/price-route')
+const schedulesRoute = require('./routes/schedule-route')
+
 const HttpError = require('./models/http-error');
 
 const app = express();
 
 const port = 5000;
-
 
 app.use((req, res, next)=>{
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -26,8 +29,14 @@ app.use((req, res, next)=>{
 })
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 
-app.use('/api/users',usersRoute);
+app.use('/images', express.static(path.join("backend/images")))
+
+
+app.use('/api/users', usersRoute);
+app.use('/api/prices', pricesRoute);
+app.use('/api/schedules', schedulesRoute);
 
 app.use((req, res, next)=>{
     const err = new HttpError('Page not found.', 404);

@@ -7,6 +7,7 @@ const userSchema = new Schema({
     address: {type: String},
     email: {type: String, required: true, unique:true},
     password: {type: String, required: true},
+    imagePath: {type: String, required: true},
     role: {type: String, required: true},
     joined: { type: Date, required: true},
     dob: { type: Date, required: true},

@@ -32,58 +32,53 @@ const getUserById = async (req, res, next)=> {
 }
 
 const createUser = async (req, res, next)=>{
-    const {name, address, dob, role} = req.body;
-    const user = {
-        name,
-        address,
-        dob,
-        role
-    }
-    // const result = validationResult(req);
-    // if(!result.isEmpty()){
-    //     return res.json({message: "not a valid name"})
-    // }
-    // const { name, dob, address, email, password, role } = req.body;
-    // const [day, month, year] = dob.split('/');
-    
-    // const user = new User({
-    //     id: uuid.v4(),
-    //     name,
-    //     dob: new Date(`${year}-${month}-${day}`),
-    //     address,
-    //     role,
-    //     email,
-    //     password,
-    //     updated: null,
-    //     weight: 0,
-    //     height: 0,
-    //     joined:new Date(),
-    //     skills: [],
-    //     specific: [],
-    //     payments: {
-    //         jan:"",
-    //         feb:"",
-    //         mar:"",
-    //         apr:"",
-    //         may:"",
-    //         jun:"",
-    //         jul:"",
-    //         aug:"",
-    //         sep:"",
-    //         oct:"",
-    //         nov:"",
-    //         dec:"",
-    //     },
+    const {name, address, dob, role, password, email} = req.body;
+    const url = req.protocol + "://" + req.get('host');
 
-    // })
-    // try{
-    //     await user.save();
-    // }catch(err){
-    //     console.log(err);
-    //     return next(new HttpError('not saved.', 400))
-    // }
-    // return res.json(user.toObject({getters: true}));
-    return res.json({message: 'saved successfully', user});
+    const result = validationResult(req);
+    if(!result.isEmpty()){
+        return res.json({message: "not a valid name"})
+    }
+    const [day, month, year] = dob.split('-');
+    
+    const user = new User({
+        id: uuid.v4(),
+        name,
+        dob: new Date(),
+        imagePath: url + '/images/' + req.file.filename,
+        address,
+        role,
+        email,
+        password,
+        updated: new Date(),
+        weight: 0,
+        height: 0,
+        joined:new Date(),
+        skills: [],
+        specific: [],
+        payments: {
+            jan:"",
+            feb:"",
+            mar:"",
+            apr:"",
+            may:"",
+            jun:"",
+            jul:"",
+            aug:"",
+            sep:"",
+            oct:"",
+            nov:"",
+            dec:"",
+        },
+
+    })
+    try{
+        await user.save();
+    }catch(err){
+        console.log(err);
+        return next(new HttpError('not saved.', 500))
+    }
+    return res.json({message: 'saved successfully'});
 }
 
 const editPayments = async(req, res, next) => {

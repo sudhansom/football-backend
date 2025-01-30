@@ -1,6 +1,7 @@
 const express = require('express');
 const { check } = require('express-validator');
 const multer = require('multer');
+const uuid = require('uuid')
 
 const { getUserById, getAllUsers, createUser, deleteUser, updateUser, editPayments, editMeasures, editSkills, deleteSkill } = require("../controller/user-controller.js")
 
@@ -24,7 +25,7 @@ const storage = multer.diskStorage({
     filename: (req, file, cb)=>{
         const name = file.originalname.toLowerCase().split(' ').join('-');
         const ext = MIME_TYPE_MAP[file.mimetype];
-        cb(null, name + '-' + new Date() + '.' + ext);
+        cb(null, name + '-' + uuid.v4() + '.' + ext);
     },
 
 })
