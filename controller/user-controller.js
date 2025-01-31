@@ -12,12 +12,19 @@ const loginUser = async (req, res, next)=> {
     try{
         user = await User.findOne({ email });
     }catch(err){
-        const error = new HttpError("user not found", 404);
+        const error = new HttpError("error on find user", 404);
         return next(error);
     }
-    if(!user || user.password != password){
-        return next(new HttpError("Credentials not matched", 404))
+    if(!user){
+        return next(new HttpError("user does not exist", 404))
     }
+     // Compare hashed password with user input
+     const isMatch = await bcrypt.compare(password, user.password);
+     if (!isMatch) {
+        const error = new HttpError("Invalid password", 401);
+        return next(error);
+     }
+
     const result = {
         name: user.name,
         id: user.id,
