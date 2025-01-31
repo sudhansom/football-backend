@@ -41,8 +41,8 @@ const storage = multer.diskStorage({
 })
 
 router.get('/', getAllUsers);
-router.post('/login', loginUser);
 router.get('/:id', getUserById);
+router.post('/login', loginUser);
 router.post('/', multer({storage:storage}).single('image'), [check('name').not().isEmpty(), check('name').isLength({min: 4})], createUser);
 router.patch('/:id', updateUser);
 router.delete('/:id', deleteUser);

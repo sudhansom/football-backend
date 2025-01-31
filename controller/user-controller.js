@@ -1,6 +1,7 @@
 const HttpError = require('../models/http-error.js');
 const uuid = require('uuid');
 const { validationResult } = require('express-validator');
+const bcrypt = require('bcryptjs')
 
 const User = require('../models/user.js')
  
@@ -62,6 +63,7 @@ const createUser = async (req, res, next)=>{
         return res.json({message: "not a valid name"})
     }
     const [day, month, year] = dob.split('-');
+    const hashedPassword = await bcrypt.hash(password, 10);
     
     const user = new User({
         id: uuid.v4(),
@@ -71,7 +73,7 @@ const createUser = async (req, res, next)=>{
         address,
         role,
         email,
-        password,
+        password: hashedPassword,
         updated: new Date(),
         weight: 0,
         height: 0,
