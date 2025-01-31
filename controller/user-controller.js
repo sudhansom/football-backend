@@ -3,6 +3,28 @@ const uuid = require('uuid');
 const { validationResult } = require('express-validator');
 
 const User = require('../models/user.js')
+ 
+
+const loginUser = async (req, res, next)=> {
+    const { email, password } = req.body;
+    let user = null;
+    try{
+        user = await User.findOne({ email });
+    }catch(err){
+        const error = new HttpError("user not found", 404);
+        return next(error);
+    }
+    if(!user || user.password != password){
+        return next(new HttpError("Credentials not matched", 404))
+    }
+    const result = {
+        name: user.name,
+        id: user.id,
+        email: user.email,
+        role: user.role
+    }
+    res.json(result);
+}
 
 const getAllUsers = async (req, res, next)=> {
     let allUsers = [];
@@ -239,3 +261,4 @@ exports.editPayments = editPayments;
 exports.editMeasures = editMeasures;
 exports.editSkills = editSkills;
 exports.deleteSkill = deleteSkill;
+exports.loginUser = loginUser;

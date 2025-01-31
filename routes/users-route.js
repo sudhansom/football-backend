@@ -3,7 +3,17 @@ const { check } = require('express-validator');
 const multer = require('multer');
 const uuid = require('uuid')
 
-const { getUserById, getAllUsers, createUser, deleteUser, updateUser, editPayments, editMeasures, editSkills, deleteSkill } = require("../controller/user-controller.js")
+const { getUserById, 
+        getAllUsers, 
+        createUser, 
+        deleteUser, 
+        updateUser, 
+        editPayments, 
+        editMeasures, 
+        editSkills, 
+        deleteSkill,   
+        loginUser 
+    } = require("../controller/user-controller.js")
 
 const router = express.Router()
 
@@ -31,6 +41,7 @@ const storage = multer.diskStorage({
 })
 
 router.get('/', getAllUsers);
+router.post('/login', loginUser);
 router.get('/:id', getUserById);
 router.post('/', multer({storage:storage}).single('image'), [check('name').not().isEmpty(), check('name').isLength({min: 4})], createUser);
 router.patch('/:id', updateUser);
