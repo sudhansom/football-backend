@@ -33,6 +33,7 @@ const loginUser = async (req, res, next)=> {
         role: user.role
     }
     const token = jwt.sign({ userId: user.id }, "your-top-secret-key", { expiresIn: "1h" });
+    console.log('Created token: ', token);
 
     res.json({ result,token });
 }

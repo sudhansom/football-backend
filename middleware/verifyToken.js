@@ -8,6 +8,7 @@ const verifyToken = async (req, res, next) => {
   }
 
   const token = authHeader.split(" ")[1].trim(); // Extract Bearer token
+  console.log('Requested token:', token);
   if (!token) {
     return res.status(401).json({ message: "Malformed token" });
   }
