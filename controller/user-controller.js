@@ -2,6 +2,7 @@ const HttpError = require('../models/http-error.js');
 const uuid = require('uuid');
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken');
 
 const User = require('../models/user.js')
  
@@ -31,7 +32,8 @@ const loginUser = async (req, res, next)=> {
         email: user.email,
         role: user.role
     }
-    res.json(result);
+    const token = jwt.sign(result, 'top_secret')
+    res.json({ result,token });
 }
 
 const getAllUsers = async (req, res, next)=> {
