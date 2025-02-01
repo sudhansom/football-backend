@@ -3,6 +3,8 @@ const { check } = require('express-validator');
 const multer = require('multer');
 const uuid = require('uuid')
 
+const verifyToken = require( "../middleware/verifyToken.js")
+
 const { getUserById, 
         getAllUsers, 
         createUser, 
@@ -40,7 +42,7 @@ const storage = multer.diskStorage({
 
 })
 
-router.get('/', getAllUsers);
+router.get('/', verifyToken,  getAllUsers);
 router.get('/:id', getUserById);
 router.post('/login', loginUser);
 router.post('/', multer({storage:storage}).single('image'), [check('name').not().isEmpty(), check('name').isLength({min: 4})], createUser);

@@ -32,7 +32,8 @@ const loginUser = async (req, res, next)=> {
         email: user.email,
         role: user.role
     }
-    const token = jwt.sign(result, 'top_secret')
+    const token = jwt.sign({ userId: user.id }, "your-top-secret-key", { expiresIn: "1h" });
+
     res.json({ result,token });
 }
 
