@@ -1,5 +1,4 @@
 const express = require('express');
-const uuid = require('uuid')
 
 const { getPrices, createPrice } = require("../controller/price-controller.js")
 
