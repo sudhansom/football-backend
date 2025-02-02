@@ -66,7 +66,30 @@ const updateMessage = async(req, res, next) => {
     }
     res.json(targetedMessage)
 }
+const deleteMessage = async(req, res, next) => {
+    const userId = req.params.id;
+    let targetedMessage;
+    try{
+        targetedMessage = await Message.findById(userId);
+    }catch(err){
+        const error = new HttpError("Unknown error", 500)
+        return next(error)
+    }
+    if(!targetedMessage){
+        const error = new HttpError("No such user...", 404);
+        return next(error);
+    }
+    try{
+        await targetedMessage.deleteOne();
+    }catch(err){
+        const error = new HttpError(err, 500)
+        return next(error)
+    }
+    res.json({message: "Successfully deleted."})
+}
 exports.getMessages = getMessages;
 exports.createMessage = createMessage;
 exports.updateMessage = updateMessage;
+exports.deleteMessage = deleteMessage;
+
 
