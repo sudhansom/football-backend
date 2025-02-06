@@ -67,7 +67,7 @@ const getUserById = async (req, res, next)=> {
 
 const createUser = async (req, res, next)=>{
     const {name, address, dob, role, password, email} = req.body;
-    const url = req.protocol + "://" + req.get('host');
+    const url = 'https://football-backend-dbpassword.up.railway.app/';//req.protocol + "://" + req.get('host');
 
     const result = validationResult(req);
     if(!result.isEmpty()){
