@@ -15,15 +15,14 @@ const getSchedules = async (req, res, next)=> {
     res.json(allSchedules.map(sch => sch.toObject({getters:true}))) ;
 }
 
-exports.getSchedules = getSchedules;
-
 const createSchedule = async (req, res, next)=> {
     const { day, slot, serial } = req.body;
     const schedule = new Schedule({
         id: uuid.v4(),
         day,
         slot,
-        serial
+        serial,
+        absence:[]
     })
     try{
         await schedule.save();
@@ -34,5 +33,30 @@ const createSchedule = async (req, res, next)=> {
     res.json({schedule: schedule.toObject({getters:true})}) ;
 }
 
+const updateParticipate = async (req, res, next)=> {
+    const id = req.params.id;
+    const { userId, going } = req.body;
+    let targetedSchedule;
+    try{
+        targetedSchedule = await Schedule.findById(id);
+    }catch(err){
+        const error = new HttpError("Unknown error", 500);
+        return next(error)
+    }
+    if(!targetedSchedule){
+        return new HttpError("No such schedule", 404);
+    }
+    if(going){
+        if(!targetedSchedule.absence.includes(userId)){
+            targetedSchedule.absence.push(userId);
+        }
+    }else {
+        targetedSchedule.absence = targetedSchedule.absence.filter(user => user != userId);
+    }
+    await targetedSchedule.save();
+    res.json({targetedSchedule: targetedSchedule.toObject({getters:true})}) ;
+}
+
 exports.getSchedules = getSchedules;
 exports.createSchedule = createSchedule;
+exports.updateParticipate = updateParticipate;
