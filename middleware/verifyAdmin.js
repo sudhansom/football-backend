@@ -14,8 +14,9 @@ const verifyAdmin = async (req, res, next) => {
   }
   jwt.verify(token, "your-top-secret-key", (err, decoded) => {
     if (err) {
-      return res.status(403).json({ message: err });
+      return res.status(403).json({ message: token });
     }
+    console.log('decoded:',decoded)
     if(decoded.userRole!='admin'){
         return res.status(403).json({ message: "not authorised..." });
     }
