@@ -41,7 +41,7 @@ const loginUser = async (req, res, next)=> {
 const getAllUsers = async (req, res, next)=> {
     let allUsers = [];
     try{
-        allUsers = await User.find()
+        allUsers = await User.find().select('-password');
     }catch(err){
         const error = new HttpError(err, 5000)
         return next(error)
@@ -53,7 +53,7 @@ const getUserById = async (req, res, next)=> {
     const userId = req.params.id;
     let user = null;
     try{
-        user = await User.findById(userId);
+        user = await User.findById(userId).select('-password');
     }catch(err){
         const error = new HttpError("user not found", 404);
         return next(error);
