@@ -4,6 +4,7 @@ const multer = require('multer');
 const uuid = require('uuid')
 
 const verifyToken = require( "../middleware/verifyToken.js")
+const verifyAdmin = require("../middleware/verifyAdmin.js")
 
 const { getUserById, 
         getAllUsers, 
@@ -43,14 +44,14 @@ const storage = multer.diskStorage({
 })
 
 router.get('/', verifyToken,  getAllUsers);
-router.get('/:id', getUserById);
+router.get('/:id',verifyToken, getUserById);
 router.post('/login', loginUser);
 router.post('/', multer({storage:storage}).single('image'), [check('name').not().isEmpty(), check('name').isLength({min: 4})], createUser);
-router.patch('/:id', updateUser);
-router.delete('/:id', deleteUser);
-router.patch('/payments/:id', editPayments);
-router.patch('/measures/:id', editMeasures);
-router.patch('/skills/:id', editSkills);
-router.patch('/skills/delete/:id', deleteSkill);
+router.patch('/:id',verifyToken, updateUser);
+router.delete('/:id',verifyToken, deleteUser);
+router.patch('/payments/:id',verifyToken, editPayments);
+router.patch('/measures/:id',verifyToken, editMeasures);
+router.patch('/skills/:id',verifyToken, editSkills);
+router.patch('/skills/delete/:id',verifyAdmin, deleteSkill);
 
 module.exports = router;

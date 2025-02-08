@@ -32,7 +32,7 @@ const loginUser = async (req, res, next)=> {
         email: user.email,
         role: user.role
     }
-    const token = jwt.sign({ userId: user.id }, "your-top-secret-key", { expiresIn: "1h" });
+    const token = jwt.sign({ userId: user.id, userRole:user.role }, "your-top-secret-key", { expiresIn: "1h" });
     console.log('Created token: ', token);
 
     res.json({ result,token });
