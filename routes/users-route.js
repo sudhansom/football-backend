@@ -53,5 +53,6 @@ router.patch('/payments/:id',verifyToken, editPayments);
 router.patch('/measures/:id',verifyToken, editMeasures);
 router.patch('/skills/:id',verifyToken, editSkills);
 router.patch('/skills/delete/:id',verifyAdmin, deleteSkill);
+router.patch('/times/:id',verifyToken, editTimes);
 
 module.exports = router;

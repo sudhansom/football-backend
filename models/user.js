@@ -9,6 +9,7 @@ const userSchema = new Schema({
     password: {type: String, required: true},
     imagePath: {type: String, required: true},
     role: {type: String, required: true},
+    times: {type: Number},
     joined: { type: Date, required: true},
     dob: { type: Date, required: true},
     updated: { type: Date},

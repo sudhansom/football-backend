@@ -265,6 +265,32 @@ const deleteUser = async (req, res, next) => {
     res.json({message: "Successfully deleted..."})
 }
 
+const editTimes = async(req, res, next) => {
+    const {height, weight} = req.body;
+    const userId = req.params.id;
+    let user = null;
+    try{
+        user = await User.findById(userId);
+    }catch(err){
+        const error = new HttpError("Unknown error", 500)
+        return next(error)
+    }
+    if(!user){
+        const error = new HttpError("No such user...", 404);
+        return next(error);
+    }
+    user.height = height;
+    user.weight = weight;
+    user.updated = new Date();
+    try{
+        user = await user.save();
+    }catch(err){
+        const error = new HttpError("Could not save height weight and weight", 500)
+        return next(error)
+    }
+    res.json({message: "Successfully saved.", user: user.toObject({getters: true})})
+}
+
 exports.getUserById = getUserById;
 exports.getAllUsers = getAllUsers;
 exports.createUser = createUser;
@@ -275,3 +301,4 @@ exports.editMeasures = editMeasures;
 exports.editSkills = editSkills;
 exports.deleteSkill = deleteSkill;
 exports.loginUser = loginUser;
+exports.editTimes = editTimes;
