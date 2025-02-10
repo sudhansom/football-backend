@@ -15,7 +15,8 @@ const { getUserById,
         editMeasures, 
         editSkills, 
         deleteSkill,   
-        loginUser 
+        loginUser,
+        editSchedule 
     } = require("../controller/user-controller.js")
 
 const router = express.Router()
@@ -53,6 +54,6 @@ router.patch('/payments/:id',verifyToken, editPayments);
 router.patch('/measures/:id',verifyToken, editMeasures);
 router.patch('/skills/:id',verifyToken, editSkills);
 router.patch('/skills/delete/:id',verifyAdmin, deleteSkill);
-router.patch('/times/:id',verifyToken, editTimes);
+router.patch('/schedule/:id',verifyToken, editSchedule);
 
 module.exports = router;

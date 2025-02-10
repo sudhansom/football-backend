@@ -265,8 +265,8 @@ const deleteUser = async (req, res, next) => {
     res.json({message: "Successfully deleted..."})
 }
 
-const editTimes = async(req, res, next) => {
-    const {height, weight} = req.body;
+const editSchedule = async(req, res, next) => {
+    const { schedule } = req.body;
     const userId = req.params.id;
     let user = null;
     try{
@@ -279,9 +279,10 @@ const editTimes = async(req, res, next) => {
         const error = new HttpError("No such user...", 404);
         return next(error);
     }
-    user.height = height;
-    user.weight = weight;
-    user.updated = new Date();
+    if(schedule >= 4 || schedule <= 0){
+        return next( new HttpError("no such schedule available.", 401))
+    }
+    user.schedule = schedule;
     try{
         user = await user.save();
     }catch(err){
@@ -301,4 +302,4 @@ exports.editMeasures = editMeasures;
 exports.editSkills = editSkills;
 exports.deleteSkill = deleteSkill;
 exports.loginUser = loginUser;
-exports.editTimes = editTimes;
+exports.editSchedule = editSchedule;
