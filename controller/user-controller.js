@@ -279,9 +279,6 @@ const editSchedule = async(req, res, next) => {
         const error = new HttpError("No such user...", 404);
         return next(error);
     }
-    if(schedule >= 4 || schedule <= 0){
-        return next( new HttpError("no such schedule available.", 401))
-    }
     user.schedule = schedule;
     try{
         user = await user.save();
