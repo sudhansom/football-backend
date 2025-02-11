@@ -6,7 +6,7 @@ const scheduleSchema = new Schema({
     day: {type: String, required: true},
     slot: {type: String, required: true},
     serial: {type: Number, required: true},
-    absence:[{type: mongoose.Schema.Types.ObjectId, ref:'User'}]
+    participate:[{type: mongoose.Schema.Types.ObjectId, ref:'User'}]
 })
 
 module.exports = mongoose.model('Schedule', scheduleSchema);
