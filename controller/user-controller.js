@@ -8,6 +8,9 @@ const User = require('../models/user.js')
  
 
 const loginUser = async (req, res, next)=> {
+    if(req.method==='OPTIONS'){
+        return next();
+    }
     const { email, password } = req.body;
     let user = null;
     try{
