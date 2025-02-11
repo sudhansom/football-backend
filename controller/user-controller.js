@@ -30,7 +30,8 @@ const loginUser = async (req, res, next)=> {
         name: user.name,
         id: user.id,
         email: user.email,
-        role: user.role
+        role: user.role,
+        schedule: user.schedule
     }
     const token = jwt.sign({ userId: user.id, userRole:user.role }, "your-top-secret-key", { expiresIn: "1h" });
     console.log('Created token: ', token);
