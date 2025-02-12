@@ -22,7 +22,7 @@ const createSchedule = async (req, res, next)=> {
         day,
         slot,
         serial,
-        absence:[]
+        participate:[]
     })
     try{
         await schedule.save();
@@ -47,11 +47,11 @@ const updateParticipate = async (req, res, next)=> {
         return new HttpError("No such schedule", 404);
     }
     if(going){
-        if(!targetedSchedule.absence.includes(userId)){
-            targetedSchedule.absence.push(userId);
+        if(!targetedSchedule.participate.includes(userId)){
+            targetedSchedule.participate.push(userId);
         }
     }else {
-        targetedSchedule.absence = targetedSchedule.absence.filter(user => user != userId);
+        targetedSchedule.participate = targetedSchedule.participate.filter(user => user != userId);
     }
     await targetedSchedule.save();
     res.json({targetedSchedule: targetedSchedule.toObject({getters:true})}) ;
