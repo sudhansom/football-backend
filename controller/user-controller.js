@@ -33,9 +33,9 @@ const loginUser = async (req, res, next)=> {
     console.log('Created token: ', token);
 
     // Remove password field before sending response
-    const { password: _, ...userWithoutPassword } = user.toObject();
+    const { password: _, ...userWithoutPassword } = user.toObject({getters: true});
 
-    res.json({ user: userWithoutPassword.toObject({getters:true}), token });
+    res.json({ user: userWithoutPassword, token });
 
 }
 
