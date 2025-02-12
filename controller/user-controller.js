@@ -24,22 +24,19 @@ const loginUser = async (req, res, next)=> {
     }
      // Compare hashed password with user input
      const isMatch = await bcrypt.compare(password, user.password);
+
      if (!isMatch) {
         const error = new HttpError("Invalid password", 401);
         return next(error);
      }
-
-    const result = {
-        name: user.name,
-        id: user.id,
-        email: user.email,
-        role: user.role,
-        schedule: user.schedule
-    }
     const token = jwt.sign({ userId: user.id, userRole:user.role }, "your-top-secret-key", { expiresIn: "1h" });
     console.log('Created token: ', token);
 
-    res.json({ result,token });
+    // Remove password field before sending response
+    const { password: _, ...userWithoutPassword } = user.toObject();
+
+    res.json({ user: userWithoutPassword, token });
+
 }
 
 const getAllUsers = async (req, res, next)=> {
