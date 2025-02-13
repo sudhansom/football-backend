@@ -2,7 +2,7 @@ const HttpError = require('../models/http-error.js');
 const uuid = require('uuid');
 
 
-const Schedule = require('../models/schedule.js')
+const Schedule = require('../models/schedule.js');
 
 const getSchedules = async (req, res, next)=> {
     let allSchedules = [];
@@ -57,6 +57,27 @@ const updateParticipate = async (req, res, next)=> {
     res.json({targetedSchedule: targetedSchedule.toObject({getters:true})}) ;
 }
 
+const resetParticipate = async (req, res, next)=> {
+    const id = req.params.id;
+    let schedules;
+    try{
+        schedules = await Schedule.find();
+    }catch(err){
+        const error = new HttpError("Unknown error", 500);
+        return next(error)
+    }
+    if(!schedules.length){
+        return new HttpError("No schedule", 404);
+    }
+    schedules.forEach(schedule => {
+        schedule.participate = schedule.participate.filter(u => u != id)
+        schedule.save()
+    })
+    
+    res.json({message: 'Succefully reset participation'}) ;
+}
+
 exports.getSchedules = getSchedules;
 exports.createSchedule = createSchedule;
 exports.updateParticipate = updateParticipate;
+exports.resetParticipate = resetParticipate;
