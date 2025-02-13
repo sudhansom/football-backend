@@ -92,6 +92,7 @@ const createUser = async (req, res, next)=>{
         joined:new Date(),
         skills: [],
         specific: [],
+        schedule: {count:0, going:''},
         payments: {
             jan:"",
             feb:"",
@@ -267,7 +268,7 @@ const deleteUser = async (req, res, next) => {
 }
 
 const editSchedule = async(req, res, next) => {
-    const { schedule } = req.body;
+    const { count, going } = req.body;
     const userId = req.params.id;
     let user = null;
     try{
@@ -280,7 +281,10 @@ const editSchedule = async(req, res, next) => {
         const error = new HttpError("No such user...", 404);
         return next(error);
     }
-    user.schedule = schedule;
+    user.schedule = {
+        count,
+        going
+    };
     try{
         user = await user.save();
     }catch(err){
