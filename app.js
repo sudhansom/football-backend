@@ -10,6 +10,7 @@ const usersRoute = require('./routes/users-route');
 const pricesRoute = require('./routes/price-route')
 const schedulesRoute = require('./routes/schedule-route')
 const messagesRoute = require('./routes/message-route')
+const feedbackRoute = require('./routes/feedback-route.js')
 
 
 const HttpError = require('./models/http-error');
@@ -43,6 +44,8 @@ app.use('/api/users', usersRoute);
 app.use('/api/prices', pricesRoute);
 app.use('/api/schedules', schedulesRoute);
 app.use('/api/messages', messagesRoute);
+app.use('/api/feedbacks', feedbackRoute);
+
 
 app.use((req, res, next)=>{
     const err = new HttpError('Page not found.', 404);
