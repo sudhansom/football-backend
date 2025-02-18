@@ -18,7 +18,7 @@ const createFeedback = async (req, res, next)=> {
     const { message, user } = req.body;
     const newFeedback = new Feedback({
         id:uuid.v4(),
-        flag:false,
+        priority:5,
         message,
         user
     })
@@ -32,7 +32,7 @@ const createFeedback = async (req, res, next)=> {
 }
 
 const updateFeedback = async(req, res, next) => {
-    const {flag} = req.body;
+    const {priority} = req.body;
     const id = req.params.id;
     let targetedFeedback;
     try{
@@ -45,7 +45,7 @@ const updateFeedback = async(req, res, next) => {
         const error = new HttpError("No such user...", 404);
         return next(error);
     }
-    targetedFeedback.flag = flag;
+    targetedFeedback.priority = priority;
     try{
         await targetedFeedback.save();
     }catch(err){
