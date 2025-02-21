@@ -44,7 +44,7 @@ const storage = multer.diskStorage({
 
 })
 
-router.get('/', verifyToken,  getAllUsers);
+router.get('/',  getAllUsers);
 router.get('/:id', getUserById);
 router.post('/login', loginUser);
 router.post('/', multer({storage:storage}).single('image'), [check('name').not().isEmpty(), check('name').isLength({min: 4})], createUser);
